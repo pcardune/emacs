@@ -143,7 +143,7 @@
 ; always get rid of trailing whitespace on save.
 (load-library "nuke-trailing-whitespace")
 (autoload 'nuke-trailing-whitespace "whitespace" nil t)
-(add-hook 'write-file-hooks 'nuke-trailing-whitespace)
+;(add-hook 'write-file-hooks 'nuke-trailing-whitespace)
 
 ; highlight beyond 80 characters
 (load-library "highlight-80+")
@@ -158,6 +158,7 @@
  '(column-number-mode t)
  '(indent-tabs-mode nil)
  '(js2-basic-offset 4)
+ '(longlines-wrap-follows-window-size t)
  '(nuke-trailing-whitespace-always-major-modes (quote (ada-mode c++-mode c-mode change-log-mode emacs-lisp-mode fortran-mode latex-mode lisp-interaction-mode lisp-mode makefile-mode nroff-mode perl-mode plain-tex-mode prolog-mode scheme-mode sgml-mode tcl-mode slitex-mode sml-mode texinfo-mode python-mode)) t)
  '(rst-level-face-base-color "grey")
  '(rst-level-face-base-light 35)
@@ -184,3 +185,5 @@
 (put 'erase-buffer 'disabled nil)
 
 (put 'narrow-to-region 'disabled nil)
+
+(put 'downcase-region 'disabled nil)
