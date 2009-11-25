@@ -5,6 +5,11 @@
 (autoload 'javascript-mode "javascript-mode" "JavaScript mode" t)
 (setq auto-mode-alist (append '(("\\.js$" . javascript-mode)) auto-mode-alist))
 
+;color theme
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-twilight)
+
 ;A reload method to easily reload this file in a live emacs session.
 (defun reload () "Reloads .emacs interactively."
 (interactive)
@@ -31,10 +36,26 @@
 (highlight-beyond-fill-column) ;hilight text beyond the fill column?
 
 ;set some default modes for certain file types.
-(add-to-list 'auto-mode-alist '("\\.\\(zcml\\|pt\\|lore\\|html\\)\\'" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.\\(zcml\\|pt\\|lore\\)\\'" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.html\\'" . django-html-mode))
 (add-to-list 'auto-mode-alist '("\\.\\(txt\\|rst\\)\\'" . rst-mode))
 (add-to-list 'auto-mode-alist '("\\.\\(js\\|c\\)\\'" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.\\(py\\|pyt\\)\\'" . python-mode))
+
+;pyflakes!
+(when (load "flymake" t)
+  (defun flymake-pyflakes-init ()
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+      (list "/opt/local/bin/pyflakes-2.5" (list local-file))))
+
+  (add-to-list 'flymake-allowed-file-name-masks
+               '("\\.py\\'" flymake-pyflakes-init)))
+
+(add-hook 'find-file-hook 'flymake-find-file-hook)
 
 ;java script mode
 (autoload 'js2-mode "js2" nil t)
@@ -125,11 +146,6 @@
 
 ; set tab width to 4
 (setq tab-width 4)
-
-; My Saved Macros!!!
-; This one sets up my working environment.
-(fset 'setup
-   [?\M-x ?s ?h ?e ?l ?l return ?\M-x ?r ?e ?n ?a ?m ?e ?- ?b ?u ?f ?f ?e ?r return ?* ?s ?e ?r ?v ?e ?r ?* return ?c ?d ?  ?/ ?h ?o ?m ?e ?/ ?p ?c ?a ?r ?d ?u ?n ?e ?/ ?W ?o ?r ?k ?/ ?K ?e ?a ?s ?/ ?r ?e ?p ?o ?/ ?p ?a ?c ?k ?a ?g ?e ?s ?/ ?k ?e ?a ?s ?. ?a ?p ?p ?/ ?t ?r ?u ?n ?k return ?\M-x ?s ?h ?e ?l ?l return ?\M-x ?r ?e ?n ?a ?m ?e ?- ?b ?u ?f ?f ?e ?r return ?* ?s ?e ?r ?v ?e ?r backspace backspace backspace backspace backspace backspace ?t ?e ?s ?t ?s ?* return ?\M-x ?x ?s backspace backspace ?s ?h ?e ?l ?l return ?\M-x ?r ?e ?n ?a ?m ?e ?- ?b ?u ?f ?f ?e ?r return ?* ?s ?e ?l ?e ?n ?i ?u ?m ?* return ?c ?d ?  ?. ?. ?/ ?. ?. ?/ ?k ?e ?a tab ?a ?l ?l ?t ?e ?s ?t ?/ ?t ?r ?u ?n ?k return ?c ?d ?  ?. ?. ?/ ?. ?. ?/ return ?l ?s return ?c ?d ?  ?k ?e ?a ?s ?. ?a ?l ?l ?t ?e ?s ?t ?s ?/ ?t ?r ?u ?n ?k return ?\M-x ?s ?h ?e ?l ?l return ?\M-x ?r ?e ?n ?a ?m ?e ?- ?b ?u ?f ?f ?e ?r return ?* ?s ?v ?n ?* return ?c ?d ?  ?. ?. ?/ ?. ?. ?/ return ?s ?v ?n ?  ?u ?p return ?\C-x ?3 S-right ?\C-x ?2 ?\C-x ?b ?* ?t ?e ?s ?t ?s ?* return ?. ?/ ?b ?i ?n ?/ ?t ?e ?s ?t ?  ?- ?u ?v ?v ?p ?2 ?1 backspace backspace ?1 return S-left ?\M-x ?s ?h ?e ?l ?l return])
 
 ;bunch of custom stuff down here!
 
