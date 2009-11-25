@@ -92,7 +92,7 @@
      ;; more words after keyword
      (,(rx (eval django-html-open-block)
            (1+ space)
-           (group (or "extends" "for" "cycle" "filter" "if not" "else"
+           (group (or "extends" "for" "cycle" "filter" "if not" "else" "empty"
                       "firstof" "debug" "if" "ifchanged" "ifequal" "ifnotequal"
                       "include" "load" "now" "regroup" "spaceless" "ssi"
                       "templatetag" "widthratio" "block"))
