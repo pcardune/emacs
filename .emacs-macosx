@@ -147,6 +147,9 @@
 (require 'psvn)
 (defalias 's 'svn-status)
 
+(require 'git)
+(setenv "PAGER" "cat") ; because git likes to use the pager when it shouldn't
+
 ; awesome buffer switching.  C-x b and start typing! use C-s and C-r to navigate in the set
 (require 'iswitchb)
 (iswitchb-default-keybindings)
@@ -179,8 +182,10 @@
  '(safe-local-variable-values (quote ((Encoding . utf-8))))
  '(save-place t nil (saveplace))
  '(show-trailing-whitespace t)
+ '(svn-status-svn-executable "/opt/subversion/bin/svn")
  '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
- '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
+ '(uniquify-buffer-name-style (quote forward) nil (uniquify))
+ '(vc-svn-program-name "/opt/subversion/bin/svn"))
 
 
 (custom-set-faces
