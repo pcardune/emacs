@@ -95,7 +95,7 @@
            (group (or "extends" "for" "cycle" "filter" "if not" "else" "empty"
                       "firstof" "debug" "if" "ifchanged" "ifequal" "ifnotequal"
                       "include" "load" "now" "regroup" "spaceless" "ssi"
-                      "templatetag" "widthratio" "block"))
+                      "templatetag" "widthratio" "block" "with"))
 
            ;; TODO: is there a more beautiful way?
            (0+ (not (any "}")))

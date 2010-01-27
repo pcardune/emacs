@@ -8,10 +8,18 @@
 (color-theme-initialize)
 (color-theme-twilight)
 
+(require 'tramp)
+
 ;A reload method to easily reload this file in a live emacs session.
 (defun reload () "Reloads .emacs interactively."
 (interactive)
 (load "~/.emacs"))
+
+(defun camel-case () "Converts symbol at current marker to camcel case"
+  (interactive)
+  (message "This is a message!")
+  (message "You are at point %i" (point))
+  )
 
 ;What does auto-fill-mode do anyways?
 (setq auto-fill-mode t)
@@ -132,6 +140,33 @@
 ;                          "https://wush.net/trac/keas" t)
 (trac-wiki-define-project "keas"
                           "https://wush.net/trac/" t)
+
+;; WikiCreole mode (wiki-mode)
+;; Thanks to Alex Schroeder of www.emacswiki.org
+;; And Jason Blevins for his inspiring Markdown Mode
+;; http://jblevins.org/projects/markdown-mode/
+(define-generic-mode 'wiki-mode
+  nil ; comments
+  nil; keywords
+  '(("^\\(= \\)\\(.*?\\)\\($\\| =$\\)" . 'info-title-1)
+    ("^\\(== \\)\\(.*?\\)\\($\\| ==$\\)" . 'info-title-2)
+    ("^\\(=== \\)\\(.*?\\)\\($\\| ===$\\)" . 'info-title-3)
+    ("^\\(====+ \\)\\(.*?\\)\\($\\| ====+$\\)" . 'info-title-4)
+    ("\\[\\[.*?\\]\\]" . 'link)
+    ("\\[.*\\]" . 'link)
+    ("\\[b\\].*?\\[/b\\]" . 'bold)
+    ("\\[i\\].*?\\[/i\\]" . 'italic)
+    ("\\*\\*.*?\\*\\*" . 'bold)
+    ("\\*.*?\\*" . 'bold)
+    ("\\_<//.*?//" . 'italic)
+    ("\\_</.*?/" . 'italic)
+    ("__.*?__" . 'italic)
+    ("_.*?_" . 'underline)
+    ("|+=?" . font-lock-string-face)
+    ("\\\\\\\\[ \t]+" . font-lock-warning-face)) ; font-lock list
+  '(".wiki\\'"); auto-mode-alist
+  '((lambda () (require 'info) (require 'goto-addr))); function-list
+  "Wiki stuff including Creole Markup and BBCode.")
 
 
 ;(setq grep-find-command

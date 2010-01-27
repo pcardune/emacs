@@ -35,6 +35,8 @@
 (setq-default case-fold-search nil) ;case sensitive searches
 (highlight-beyond-fill-column) ;hilight text beyond the fill column?
 
+(require 'django-html-mode)
+
 ;set some default modes for certain file types.
 (add-to-list 'auto-mode-alist '("\\.\\(zcml\\|pt\\|lore\\)\\'" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.html\\'" . django-html-mode))
