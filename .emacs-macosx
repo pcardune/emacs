@@ -3,6 +3,12 @@
 ;(add-to-list 'load-path "~/.site-lisp/emacs-goodies-el/")
 ;(add-to-list 'vc-handled-backends 'SVN)
 
+;;; Shell mode
+;;(setq ansi-color-names-vector ; better contrast colors
+;;      ["black" "red4" "green4" "yellow4"
+;;       "blue3" "magenta4" "cyan4" "white"])
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
 ;color theme
 (require 'color-theme)
 (color-theme-initialize)
@@ -173,7 +179,7 @@
 ;  '("find . -name '.svn' -prune -name \"*\" -o -print0 | xargs -0 grep -in -e " . 75))
 ;(setq grep-find-command
 ;  '("find . -name '.svn' -prune -name \"*\" -o -print0 | xargs -0 grep -in -e " . 74))
-(setq grep-find-command '("find . -name '.svn' -prune -o -exec grep -nH -e  {} /dev/null \;" . 54))
+;(setq grep-find-command '("find . -name '.svn' -prune -o -exec grep -nH -e  {} /dev/null \;" . 54))
 
 ; add a pdb trace line when you hit C-c p
 (define-key global-map "\C-cp" '(lambda() (interactive) (insert "import pdb; pdb.set_trace()")))
