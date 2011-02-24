@@ -1,11 +1,10 @@
 ;;;
 ;;;  ruby-mode.el -
 ;;;
-;;;  $Author$
 ;;;  created at: Fri Feb  4 14:49:13 JST 1994
 ;;;
 
-(defconst ruby-mode-revision "$Revision$"
+(defconst ruby-mode-revision "1"
   "Ruby mode revision string.")
 
 (defconst ruby-mode-version
