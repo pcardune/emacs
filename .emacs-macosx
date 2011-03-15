@@ -307,6 +307,7 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(auto-save-file-name-transforms (quote (("/Volumes/ps-dev/*" "/tmp" t) ("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/var/folders/R8/R86MaxmlEQqTWfkQVWwUerGW47g/-Tmp-/\\2" t))))
  '(c-basic-offset 2)
  '(column-number-mode t)
  '(css-indent-offset 2)
@@ -319,7 +320,7 @@
  '(js2-enter-indents-newline nil)
  '(js2-rebind-eol-bol-keys nil)
  '(longlines-wrap-follows-window-size t)
- '(nuke-trailing-whitespace-always-major-modes (quote (ada-mode c++-mode c-mode change-log-mode emacs-lisp-mode fortran-mode latex-mode lisp-interaction-mode lisp-mode makefile-mode nroff-mode perl-mode plain-tex-mode prolog-mode scheme-mode sgml-mode tcl-mode slitex-mode sml-mode texinfo-mode python-mode)) t)
+ '(nuke-trailing-whitespace-always-major-modes (quote (objc-mode ada-mode c++-mode c-mode change-log-mode emacs-lisp-mode fortran-mode latex-mode lisp-interaction-mode lisp-mode makefile-mode nroff-mode perl-mode plain-tex-mode prolog-mode scheme-mode sgml-mode tcl-mode slitex-mode sml-mode texinfo-mode python-mode)) t)
  '(rst-level-face-base-color "grey")
  '(rst-level-face-base-light 35)
  '(safe-local-variable-values (quote ((Encoding . utf-8))))
