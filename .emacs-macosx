@@ -268,6 +268,13 @@
   "Wiki stuff including Creole Markup and BBCode.")
 
 
+; markdown mode!
+(autoload 'markdown-mode "markdown-mode.el"
+   "Major mode for editing Markdown files" t)
+(setq auto-mode-alist
+   (cons '("\\.md" . markdown-mode) auto-mode-alist))
+
+
 ;(setq grep-find-command
 ;  '("find . -name '.svn' -prune -name \"*\" -o -print0 | xargs -0 grep -in -e " . 75))
 ;(setq grep-find-command
@@ -320,7 +327,7 @@
  '(js2-enter-indents-newline nil)
  '(js2-rebind-eol-bol-keys nil)
  '(longlines-wrap-follows-window-size t)
- '(nuke-trailing-whitespace-always-major-modes (quote (objc-mode ada-mode c++-mode c-mode change-log-mode emacs-lisp-mode fortran-mode latex-mode lisp-interaction-mode lisp-mode makefile-mode nroff-mode perl-mode plain-tex-mode prolog-mode scheme-mode sgml-mode tcl-mode slitex-mode sml-mode texinfo-mode python-mode)) t)
+ '(nuke-trailing-whitespace-always-major-modes (quote (html-mode objc-mode ada-mode c++-mode c-mode change-log-mode emacs-lisp-mode fortran-mode latex-mode lisp-interaction-mode lisp-mode makefile-mode nroff-mode perl-mode plain-tex-mode prolog-mode scheme-mode sgml-mode tcl-mode slitex-mode sml-mode texinfo-mode python-mode)) t)
  '(rst-level-face-base-color "grey")
  '(rst-level-face-base-light 35)
  '(safe-local-variable-values (quote ((Encoding . utf-8))))
