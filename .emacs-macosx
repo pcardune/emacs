@@ -3,12 +3,6 @@
 ;(add-to-list 'load-path "~/.site-lisp/emacs-goodies-el/")
 ;(add-to-list 'vc-handled-backends 'SVN)
 
-;;; Shell mode
-;;(setq ansi-color-names-vector ; better contrast colors
-;;      ["black" "red4" "green4" "yellow4"
-;;       "blue3" "magenta4" "cyan4" "white"])
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
 ;color theme
 (require 'color-theme)
 (color-theme-initialize)
@@ -54,11 +48,51 @@
 (require 'django-html-mode)
 
 ;set some default modes for certain file types.
-(add-to-list 'auto-mode-alist '("\\.\\(zcml\\|pt\\|lore\\)\\'" . nxml-mode))
-(add-to-list 'auto-mode-alist '("\\.html\\'" . django-html-mode))
+(add-to-list 'auto-mode-alist '("\\.\\(zcml\\|pt\\|lore\\)\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.\\(txt\\|rst\\)\\'" . rst-mode))
 (add-to-list 'auto-mode-alist '("\\.\\(js\\|c\\)\\'" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.\\(py\\|pyt\\)\\'" . python-mode))
+
+
+                                        ;set up web-mode
+(require 'web-mode)
+;(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.gsp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.es6\\'" . web-mode))
+(setq web-mode-content-types-alist
+      '(("jsx" . "\\.js[x]?\\'")
+        ("jsx" . "\\.es6\\'")))
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (when (string-suffix-p ".gsp" buffer-file-name)
+    (setq web-mode-code-indent-offset 4)
+    (setq web-mode-markup-indent-offset 4))
+  (when (>= (string-match "doorsystem" buffer-file-name) 0)
+    (setq web-mode-code-indent-offset 4)
+    (setq web-mode-markup-indent-offset 4))
+)
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+(define-derived-mode my-html-mode web-mode "My HTML mode"
+  "A mode for my html files."
+)
+(add-to-list 'auto-mode-alist '("\\.html\\'" . my-html-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . my-html-mode))
+
+(add-to-list 'auto-mode-alist '("\\.handlebars\\'" . handlebars-mode))
+
+
+; jsx-mode
+(require 'jsx-mode)
+; (add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
+; (add-to-list 'auto-mode-alist '("\\.js$" . jsx-mode))
+(autoload 'jsx-mode "jsx-mode" "JSX mode" t)
+(setq jsx-indent-level 2)
 
 ;pyflakes!
 (when (load "flymake" t)
@@ -78,7 +112,7 @@
 ;; JAVASCRIPT MODE SETUP ------------------------------
 ;js2-mode by steve yegge for javascript parsing
 (autoload 'js2-mode "js2" nil t)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+; (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 ; another javascript mode that has better indentation
 (autoload 'espresso-mode "espresso" nil t)
 
@@ -213,9 +247,6 @@
 (add-hook 'font-lock-mode-hook 'highlight-tabs)
 ;(add-hook 'font-lock-mode-hook 'highlight-trailing-whitespace)
 
-;(require 'vc-bzr) ;Get bzr version control support
-
-
 ;;;(require 'rst) ;; get rst-mode for emacs (restructured text editing)
 
 ;(add-to-list 'load-path "~/.site-lisp/ruby-mode")
@@ -235,10 +266,6 @@
 (load-library "trac-wiki")
 (autoload 'trac-wiki "trac-wiki"
           "Trac wiki editing entry-point." t)
-;(trac-wiki-define-project "keas"
-;                          "https://wush.net/trac/keas" t)
-(trac-wiki-define-project "keas"
-                          "https://wush.net/trac/" t)
 
 ;; WikiCreole mode (wiki-mode)
 ;; Thanks to Alex Schroeder of www.emacswiki.org
@@ -292,8 +319,10 @@
 (setenv "PAGER" "cat") ; because git likes to use the pager when it shouldn't
 
 ; awesome buffer switching.  C-x b and start typing! use C-s and C-r to navigate in the set
-(require 'iswitchb)
-(iswitchb-default-keybindings)
+; !! iswitchb was deprecated in favor of icomple-mode
+; (require 'iswitchb)
+; (iswitchb-default-keybindings)
+(icomplete-mode 99)
 
 ; set tab width to 4
 (setq tab-width 4)
@@ -301,25 +330,38 @@
 ; always get rid of trailing whitespace on save.
 (load-library "nuke-trailing-whitespace")
 (autoload 'nuke-trailing-whitespace "whitespace" nil t)
-;(add-hook 'write-file-hooks 'nuke-trailing-whitespace)
+(add-hook 'write-file-hooks 'nuke-trailing-whitespace)
 
 ; highlight beyond 80 characters
 (load-library "highlight-80+")
 
-
 ;bunch of custom stuff down here!
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(auto-save-file-name-transforms (quote (("/Volumes/ps-dev/*" "/tmp" t) ("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/var/folders/R8/R86MaxmlEQqTWfkQVWwUerGW47g/-Tmp-/\\2" t))))
- '(c-basic-offset 2)
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(auto-save-file-name-transforms
+   (quote
+    (("/Volumes/ps-dev/*" "/tmp" t)
+     ("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/var/folders/R8/R86MaxmlEQqTWfkQVWwUerGW47g/-Tmp-/\\2" t))))
+ '(bmkp-desktop-jump-save-before-flag t)
+ '(bmkp-last-as-first-bookmark-file "/Users/pcardune/.emacs.d/bookmarks")
+ '(c-basic-offset 4)
  '(column-number-mode t)
  '(css-indent-offset 2)
  '(espresso-indent-level 2)
+ '(exec-path
+   (quote
+    ("/Users/pcardune/.sdkman/candidates/grails/current/bin" "./node_modules/.bin" "/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/git/bin" "/Applications/Postgres.app/Contents/Versions/9.4/bin" "/usr/local/Cellar/emacs-mac/emacs-24.5-z-mac-5.13/libexec/emacs/24.5/x86_64-apple-darwin15.0.0" "/Users/pcardune/.nvm/versions/node/v5.0.0/bin")))
  '(fill-column 80)
+ '(grep-find-ignored-directories
+   (quote
+    ("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "node_modules" "bower_components" "src-min" "src-min-noconflict")))
+ '(grep-find-ignored-files
+   (quote
+    (".#*" "*.o" "*~" "*.bin" "*.lbin" "*.so" "*.a" "*.ln" "*.blg" "*.bbl" "*.elc" "*.lof" "*.glo" "*.idx" "*.lot" "*.fmt" "*.tfm" "*.class" "*.fas" "*.lib" "*.mem" "*.x86f" "*.sparcf" "*.dfsl" "*.pfsl" "*.d64fsl" "*.p64fsl" "*.lx64fsl" "*.lx32fsl" "*.dx64fsl" "*.dx32fsl" "*.fx64fsl" "*.fx32fsl" "*.sx64fsl" "*.sx32fsl" "*.wx64fsl" "*.wx32fsl" "*.fasl" "*.ufsl" "*.fsl" "*.dxl" "*.lo" "*.la" "*.gmo" "*.mo" "*.toc" "*.aux" "*.cp" "*.fn" "*.ky" "*.pg" "*.tp" "*.vr" "*.cps" "*.fns" "*.kys" "*.pgs" "*.tps" "*.vrs" "*.pyc" "*.pyo" "*.min.js" "*.js.map" "*.min.css")))
  '(indent-tabs-mode nil)
  '(js-indent-level 2)
  '(js2-auto-indent-flag nil)
@@ -327,22 +369,28 @@
  '(js2-enter-indents-newline nil)
  '(js2-rebind-eol-bol-keys nil)
  '(longlines-wrap-follows-window-size t)
- '(nuke-trailing-whitespace-always-major-modes (quote (html-mode objc-mode ada-mode c++-mode c-mode change-log-mode emacs-lisp-mode fortran-mode latex-mode lisp-interaction-mode lisp-mode makefile-mode nroff-mode perl-mode plain-tex-mode prolog-mode scheme-mode sgml-mode tcl-mode slitex-mode sml-mode texinfo-mode python-mode)) t)
+ '(menu-bar-mode nil)
+ '(nuke-trailing-whitespace-always-major-modes
+   (quote
+    (web-mode jsx-mode js2-mode html-mode objc-mode ada-mode c++-mode c-mode change-log-mode emacs-lisp-mode fortran-mode latex-mode lisp-interaction-mode lisp-mode makefile-mode nroff-mode perl-mode plain-tex-mode prolog-mode scheme-mode sgml-mode tcl-mode slitex-mode sml-mode texinfo-mode python-mode)) t)
  '(rst-level-face-base-color "grey")
  '(rst-level-face-base-light 35)
  '(safe-local-variable-values (quote ((Encoding . utf-8))))
  '(save-place t nil (saveplace))
- '(show-trailing-whitespace t)
+ '(savehist-mode t)
+ '(show-trailing-whitespace nil)
  '(tab-width 2)
  '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
+ '(tool-bar-mode nil)
+ '(typescript-indent-level 2)
  '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
 
 
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(font-lock-string-face ((nil (:foreground "Green"))))
  '(highlight-current-line-face ((t (:background "ivory1"))))
  '(pesche-space ((t (:background "light cyan" :foreground "red" :strike-through t))))
@@ -356,3 +404,36 @@
 (put 'narrow-to-region 'disabled nil)
 
 (put 'downcase-region 'disabled nil)
+
+(require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
+(cask-initialize)
+(add-hook 'after-init-hook #'global-flycheck-mode)
+(load-library "bookmark+")
+(add-hook 'kill-emacs-hook 'bmkp-desktop-save-as-last)
+
+
+(require 'flycheck)
+(flycheck-add-mode 'javascript-eslint 'jsx-mode)
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+(flycheck-add-mode 'javascript-eslint 'js2-mode)
+;; https://github.com/purcell/exec-path-from-shell
+;; only need exec-path-from-shell on OSX
+;; this hopefully sets up path and other vars better
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
+(defun save-macro (name)
+  "save a macro. Take a name as argument
+     and save the last defined macro under
+     this name at the end of your .emacs"
+  (interactive "SName of the macro :")  ; ask for the name of the macro
+  (kmacro-name-last-macro name)         ; use this name for the macro
+  (find-file user-init-file)            ; open ~/.emacs or other user init file
+  (goto-char (point-max))               ; go to the end of the .emacs
+  (newline)                             ; insert a newline
+  (insert-kbd-macro name)               ; copy the macro
+  (newline)                             ; insert a newline
+  (switch-to-buffer nil))               ; return to the initial buffer
+
+(fset 'es6-import
+   (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([1 M-right M-backspace 105 109 112 111 114 116 M-right 67108896 19 40 return 23 32 102 114 111 109 32 19 41 return left 11] 0 "%d")) arg)))
